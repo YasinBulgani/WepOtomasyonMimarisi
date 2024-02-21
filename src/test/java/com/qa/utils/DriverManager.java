@@ -10,12 +10,21 @@ import java.io.File;
 
 public class DriverManager {
 
-    private static WebDriver driver;
+    public static WebDriver driver;
 
-    public static void main(String[] args) {
-        initializeDriver();
-        openAndSearch();
-        quitDriver();
+    public static WebDriver getDriver() {
+        if (driver == null) {
+            initializeDriver();
+        }
+        return driver;
+    }
+
+    // Diğer metodlar buraya eklenecek...
+
+    public static void quitDriver() {
+        if (driver != null) {
+            driver.quit();
+        }
     }
 
     public static void initializeDriver() {
@@ -47,31 +56,21 @@ public class DriverManager {
 
             // Web sayfasına gitme
             driver.get(ConfigReader.getProperty("website.url"));
-            driver.manage().window().maximize(); // Pencereyi maksimize etme
+            driver.manage().window().maximize();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void quitDriver() {
-        // WebDriver'ı kapatma
-        if (driver != null) {
-            driver.quit();
-        }
-    }
-
     public static void openAndSearch() {
-
         // Arama kutusunu bulma ve kullanma
         By searchBoxLocator = By.xpath(ConfigReader.getProperty("search.box.xpath"));
-
         WebElement searchButton = driver.findElement(searchBoxLocator);
         searchButton.click();
 
         // Ekran görüntüsü alma
         File screenshotsDir = new File("src/test/resources/screenshots");
-
         synchronized (screenshotsDir) {
             if (!screenshotsDir.exists()) {
                 screenshotsDir.mkdirs();
@@ -82,6 +81,5 @@ public class DriverManager {
 
         // Ekstra işlemler
         // ...
-
     }
 }

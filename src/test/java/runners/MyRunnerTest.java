@@ -19,7 +19,7 @@ import static io.cucumber.junit.CucumberOptions.SnippetType.CAMELCASE;
 //                , "me.jvt.cucumber.report.PrettyReports:target/Pixel3/cucumber-html-reports"
         }
         ,features = {"src/test/resources"}
-        ,glue = {"com.qa.java.stepdef"}
+        ,glue = {"stepdef"}
         ,snippets = CAMELCASE
         ,dryRun=false
         ,monochrome=true
@@ -30,6 +30,8 @@ import static io.cucumber.junit.CucumberOptions.SnippetType.CAMELCASE;
 
 public class MyRunnerTest {
 
+    private static final DriverManager driverManager = new DriverManager();
+
     @BeforeClass
     public static void initialize() throws Exception {
         GlobalParams params = new GlobalParams();
@@ -38,18 +40,11 @@ public class MyRunnerTest {
         ThreadContext.put("ROUTINGKEY", params.getPlatformName() + "_"
                 + params.getDeviceName());
 
-        new DriverManager().initializeDriver();
-
     }
 
     @AfterClass
     public static void quit(){
-        DriverManager driverManager = new DriverManager();
-        DriverManager.quitDriver();
-
-
-
-        }
-
+        driverManager.quitDriver();
     }
+}
 
