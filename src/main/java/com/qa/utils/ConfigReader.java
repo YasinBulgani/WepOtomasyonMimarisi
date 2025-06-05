@@ -8,12 +8,12 @@ public class ConfigReader {
     private static Properties properties;
 
     static {
-        try {
-            String filePath = "src/browser.properties";
-            FileInputStream fileInputStream = new FileInputStream(filePath);
+        String filePath = "src/browser.properties";
+        try (FileInputStream fileInputStream = new FileInputStream(filePath)) {
             properties = new Properties();
             properties.load(fileInputStream);
         } catch (IOException e) {
+            System.err.println("Failed to load configuration from " + filePath + ": " + e.getMessage());
             e.printStackTrace();
         }
     }
