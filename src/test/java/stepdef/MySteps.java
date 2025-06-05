@@ -27,8 +27,13 @@ public class MySteps {
 
 
     @And("User waits for {int} seconds")
-    public void userWaitsForSeconds(int saniye) throws InterruptedException {
-        Thread.sleep(saniye * 1000); // Saniyeyi milisaniye cinsine çevirerek bekleyin
+    public void userWaitsForSeconds(int saniye) {
+        long endTime = System.currentTimeMillis() + saniye * 1000L;
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(saniye));
+        try {
+            wait.until(webDriver -> System.currentTimeMillis() >= endTime);
+        } catch (Exception ignored) {
+        }
     }
 
     @And("I clicks the {string}")
